@@ -4,11 +4,9 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 
-# 1. SETUP: Load API Key and Initialize Client
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# 2. THE TOOL: Search logic for the JSON file
 def search_memories(query):
     """Searches the JSON file for keywords in topic or info."""
     try:
@@ -28,7 +26,6 @@ def search_memories(query):
     except Exception as e:
         return f"Neural core error: {e}"
 
-# 3. TOOL DEFINITION: Tell OpenAI how to use the function
 tools = [{
     "type": "function",
     "function": {
@@ -44,20 +41,16 @@ tools = [{
     }
 }]
 
-# 4. CHAT LOGIC: The Agentic Brain
 def beepboop_chat(message, history):
-    # Load persona from text file
     if os.path.exists("instructions.txt"):
         with open("instructions.txt", "r") as f:
             system_prompt = f.read()
     else:
         system_prompt = "You are BeepBoop, a symbiotic robot."
 
-    # Gradio 6 history is already a list of dicts. We just combine them.
     messages = [{"role": "system", "content": system_prompt}] + history
     messages.append({"role": "user", "content": message})
 
-    # Step 1: Decision Call
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=messages,
@@ -66,7 +59,6 @@ def beepboop_chat(message, history):
     
     ai_msg = response.choices[0].message
 
-    # Step 2: Handle Tool Call (if BeepBoop needs a memory)
     if ai_msg.tool_calls:
         messages.append(ai_msg)
         for tool_call in ai_msg.tool_calls:
@@ -79,25 +71,19 @@ def beepboop_chat(message, history):
                 "content": memory_data
             })
         
-        # Step 3: Final Answer Generation
         final_resp = client.chat.completions.create(model="gpt-4o-mini", messages=messages)
         return final_resp.choices[0].message.content
 
     return ai_msg.content
 
-# 5. UI: The Gradio 6 Interface
 with gr.Blocks() as demo:
-    gr.Markdown("# 🤖 BeepBoop: Neural Interface")
-    
-    # NOTE: type="messages" is removed because it's now the only way!
+    gr.Markdown(" BeepBoop: Neural Interface")
     chatbot = gr.Chatbot(label="Symbiotic Link", height=500)
     msg = gr.Textbox(placeholder="Ask about my human memories...", show_label=False)
     
     def respond(user_message, chat_history):
-        # Calculate response
         bot_res = beepboop_chat(user_message, chat_history)
         
-        # Update history with the new messages
         chat_history.append({"role": "user", "content": user_message})
         chat_history.append({"role": "assistant", "content": bot_res})
         
@@ -106,5 +92,4 @@ with gr.Blocks() as demo:
     msg.submit(respond, [msg, chatbot], [msg, chatbot])
 
 if __name__ == "__main__":
-    # Theme is passed here to fix the UserWarning
     demo.launch(theme=gr.themes.Monochrome())
