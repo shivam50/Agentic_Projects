@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Movie Selector AI</h2>
+    <input id="movie" placeholder="Movie/Series">
+    <input id="genre" placeholder="Genre (e.g. Sci-Fi)">
+    <button onclick="getMovie()">Find Movie</button>
+    <p id="response"></p>
+
+    <script>
+        async function getMovie() {
+            const res = await fetch('/ask', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    message: document.getElementById('movie').value,
+                    genre: document.getElementById('genre').value
+                })
+            });
+            const data = await res.json();
+            document.getElementById('response').innerText = data.answer;
+        }
+    </script>
+</body>
+</html>

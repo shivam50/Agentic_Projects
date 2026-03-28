@@ -1,0 +1,9 @@
+date,merchant,amount,category,is_recurring
+2026-02-01,Netflix,15.99,Subscription,true
+2026-02-02,Starbucks,5.50,Food,false
+2026-02-05,Landlord Inc,1200.00,Rent,true
+2026-02-10,Starbucks,6.25,Food,false
+2026-02-12,Starbucks,5.10,Food,false
+2026-02-15,Unknown_Tech_Global,499.00,Shopping,false
+2026-02-18,Starbucks,52.00,Food,false
+2026-02-20,ZEL-4922_Transfer,150.00,Transfer,false

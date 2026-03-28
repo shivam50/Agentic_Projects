@@ -1,0 +1,16 @@
+# Ignore all environment variable files anywhere in the project
+.env
+.env.*
+*.env
+
+# Ignore Python cache and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Ignore Node.js modules (since you are using MCP servers)
+node_modules/
+
+# Ignore Mac system files
+.DS_Store

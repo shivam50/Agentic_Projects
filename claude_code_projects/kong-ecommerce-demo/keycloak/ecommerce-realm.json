@@ -1,0 +1,114 @@
+{
+  "realm": "ecommerce",
+  "displayName": "E-Commerce Demo",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": false,
+  "accessTokenLifespan": 900,
+  "clients": [
+    {
+      "clientId": "ecommerce-app",
+      "name": "E-Commerce SPA",
+      "description": "Public client for the browser-based SPA",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "protocol": "openid-connect",
+      "rootUrl": "http://localhost:3000",
+      "baseUrl": "http://localhost:3000",
+      "adminUrl": "http://localhost:3000",
+      "redirectUris": [
+        "http://localhost:3000/*",
+        "http://localhost:8000/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3000",
+        "http://localhost:8000"
+      ],
+      "attributes": {
+        "post.logout.redirect.uris": "http://localhost:3000/*",
+        "pkce.code.challenge.method": "S256"
+      },
+      "fullScopeAllowed": true
+    },
+    {
+      "clientId": "kong",
+      "name": "Kong API Gateway",
+      "description": "Confidential client used by Kong OIDC plugin to introspect tokens",
+      "enabled": true,
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "kong-secret",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost:8000/*"
+      ],
+      "webOrigins": [],
+      "fullScopeAllowed": true,
+      "attributes": {}
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "user",
+        "description": "Regular customer",
+        "composite": false
+      },
+      {
+        "name": "admin",
+        "description": "Store administrator",
+        "composite": false
+      }
+    ]
+  },
+  "defaultRoles": ["user"],
+  "users": [
+    {
+      "username": "demouser",
+      "email": "demo@example.com",
+      "firstName": "Demo",
+      "lastName": "User",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": ["user"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "adminuser",
+      "email": "admin@example.com",
+      "firstName": "Admin",
+      "lastName": "User",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": ["user", "admin"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin123",
+          "temporary": false
+        }
+      ]
+    }
+  ],
+  "scopeMappings": [],
+  "clientScopeMappings": {}
+}

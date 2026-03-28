@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ComplAI Sales Agent</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; line-height: 1.6; }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+        #output { background: #f4f4f4; padding: 20px; border-radius: 5px; white-space: pre-wrap; margin-top: 20px; border: 1px solid #ddd; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🚀 ComplAI Sales Orchestrator</h1>
+    <p>Enter lead details below to let the Manager & SDRs generate the best email.</p>
+    
+    <form id="salesForm">
+        <textarea name="lead_info" placeholder="Example: CEO of TechFlow, interested in SOC2..."></textarea>
+        <button type="submit" id="btn">Generate Best Email</button>
+    </form>
+
+    <div id="output" style="display:none;">
+        <h3>Manager's Selected Email:</h3>
+        <div id="emailContent"></div>
+    </div>
+
+    <script>
+        document.getElementById('salesForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn');
+            const output = document.getElementById('output');
+            const content = document.getElementById('emailContent');
+            
+            btn.innerText = "Manager is reviewing drafts...";
+            btn.disabled = true;
+
+            const formData = new FormData(e.target);
+            const response = await fetch('/generate', { method: 'POST', body: formData });
+            const data = await response.json();
+
+            content.innerText = data.email;
+            output.style.display = 'block';
+            btn.innerText = "Generate Best Email";
+            btn.disabled = false;
+        };
+    </script>
+</body>
+</html>
